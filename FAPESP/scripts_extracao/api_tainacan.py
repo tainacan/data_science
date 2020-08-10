@@ -70,6 +70,4 @@ def tainacan_ext(install, output_name):
         
       
         print("   * Salvando os itens da coleção {}".format(col_name))
-        items_df.to_csv("C://Users//luisr//OneDrive//Documentos//"+output_name+"_{}_Tainacan_ext.csv".format(col_name), index=False)
-    
-tainacan_ext("http://www.funarte.gov.br/", "FUNARTE")
+        items_df.to_csv(output_name+"_{}_Tainacan_ext.csv".format(col_name), index=False)
