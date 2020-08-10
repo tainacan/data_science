@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Aug  9 16:50:10 2020
-
-@author: luisr
-"""
 from selenium import webdriver
 import pandas as pd
 import random
@@ -90,21 +85,10 @@ def sophia_webScrape(entidade, url, n_items):
             time.sleep(5)
             
     #Csv com dados dos registros coletados
-    result_df.to_csv("C://Users//luisr//OneDrive//Documentos//" + entidade + "_sophia_webSpcrape.csv", index = False)
+    result_df.to_csv(entidade + "_sophia_webSpcrape.csv", index = False)
     
     #Txt com os códigos não encontrados
-    with open("C://Users//luisr//OneDrive//Documentos//" + entidade + "_notFindCodes.txt", "w") as not_find_txt:
+    with open(entidade + "_notFindCodes.txt", "w") as not_find_txt:
         not_find_txt.write(", ".join(str(code) for code in not_find))
     
     firefox.quit()
-    
-#%%
-nItens_dict = {"funarte||http://cedoc.funarte.gov.br/sophia_web/":125859, 
-               "bn_digital||http://acervo.bndigital.bn.br/sophia/":101818, 
-               "rui||http://acervos.casaruibarbosa.gov.br/":220911}
-
-
-for entidade in nItens_dict.keys():
-    
-    print("\nColetando 100 itens aleatórios de {}".format(entidade.split('||')[0]))
-    sophia_webScrape(entidade.split('||')[0], entidade.split('||')[1], nItens_dict[entidade])
