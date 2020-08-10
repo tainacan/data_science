@@ -1,17 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 29 09:19:49 2020
 
-@author: luisr
-"""
-
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 24 10:37:23 2020
-
-@author: luisr
-"""
 from bs4 import BeautifulSoup as bs
 import requests as req
 import pandas as pd
@@ -37,5 +25,5 @@ for i in range(18):
     n+=1
     time.sleep(5)
 
-videos_iphan.to_csv("C://Users//luisr//OneDrive//Documentos//iphan_videos_ext.csv", index=False)
+videos_iphan.to_csv("iphan_videos_ext.csv", index=False)
 
