@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 27 08:39:20 2020
 
-@author: luisr
-"""
 from bs4 import BeautifulSoup as bs
 import requests as req
 import random
@@ -104,14 +100,4 @@ for obj_id in range(100):
     print("   * Metadados para o item {} coletados.".format(n))
     time.sleep(7)
 
-result_df.to_csv("C://Users//luisr//OneDrive//Documentos//teste_bn.csv", index=False)
-
-
-#%%
-#Metadados de Exemplar
-metadata_exemp = soup.find_all("th", {"class":"hidden-xs hidden-sm"}) # Iterar pelos resultados - metadados de exemplares
-
-
-#Valores para os metadados do exemplar
-value_exemp = soup.find_all("td", {"class":"hidden-xs hidden-sm"})
-value_exemp[2].getText().strip() #iterar dentro desses dados
+result_df.to_csv("bn_acervo.csv", index=False)
