@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 28 09:52:57 2020
 
-@author: luisr
-"""
 from sickle import Sickle as sk
 import xml.etree.ElementTree as ET
 from collections import defaultdict 
@@ -56,5 +52,5 @@ for record in records:
         break
     
     time.sleep(5)
-#%%
-oai_rui.to_csv("C://Users//luisr//OneDrive//Documentos//oai_rui.csv")
+    
+oai_rui.to_csv("oai_rui.csv")
