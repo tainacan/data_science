@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Aug 16 18:43:20 2020
-
-@author: luisr
-"""
 import pandas as pd
 import time
 import random
