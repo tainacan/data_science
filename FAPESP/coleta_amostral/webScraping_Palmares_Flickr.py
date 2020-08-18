@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 24 10:37:23 2020
-
-@author: luisr
-"""
 from bs4 import BeautifulSoup as bs
 import requests as req
 import pandas as pd
@@ -46,4 +40,4 @@ for page in range(43):
     
     time.sleep(10)
 
-result_df.to_csv("C://Users//luisr//OneDrive//Documentos//palmares_flickr_photos.csv")
+result_df.to_csv("palmares_flickr_photos.csv")
