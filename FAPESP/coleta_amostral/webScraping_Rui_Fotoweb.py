@@ -1,14 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 29 10:24:03 2020
-
-@author: luisr
-"""
 from selenium import webdriver
 import pandas as pd
 import time
 
-#%%
 #Configura o webdriver como Firefox
 #Link para donwload do geckodriver do Firefox - https://github.com/mozilla/geckodriver/releases
 #Necessita do geckodriver salvo em uma pasta identificada nas variáveis de ambiente PATH.
@@ -40,7 +33,6 @@ result_table = result_table.drop(result_table.index[0])
 
 result_table['Titulo'] = titulo
 result_table['Link'] = currentUrl
-
 
 for i in range(100):
     try:
@@ -83,7 +75,4 @@ for i in range(100):
         result_table_T['Link'] = currentUrl
         
         result_table = result_table.append(result_table_T)
-    
-    
-#%%
-print(result_table.to_csv("C://Users//luisr//OneDrive//Documentos//rui_fotoweb_ext.csv", index = False))
+print(result_table.to_csv("rui_fotoweb_ext.csv", index = False))
