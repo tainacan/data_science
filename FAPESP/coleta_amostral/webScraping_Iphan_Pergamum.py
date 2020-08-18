@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Aug 17 09:50:37 2020
-
-@author: luisr
-"""
-
 from selenium import webdriver
 from bs4 import BeautifulSoup as bs
 import pandas as pd
@@ -90,7 +83,6 @@ for i in range(10):
     
 driver.close()
 
-#%%
 resultado.to_csv("iphan_acervoDigital.csv", index=False)   
 
 
