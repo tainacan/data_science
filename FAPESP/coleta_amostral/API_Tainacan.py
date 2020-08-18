@@ -1,13 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 29 14:49:22 2020
-
-@author: luisr
-"""
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup as bs
-
 
 def tainacan_ext(install, output_name):
     
@@ -70,6 +63,6 @@ def tainacan_ext(install, output_name):
         
       
         print("   * Salvando os itens da coleção {}".format(col_name))
-        items_df.to_csv("C://Users//luisr//OneDrive//Documentos//"+output_name+"_{}_Tainacan_ext.csv".format(col_name), index=False)
+        items_df.to_csv(path+output_name+"_{}_Tainacan_ext.csv".format(col_name), index=False)
     
-tainacan_ext("http://www.funarte.gov.br/", "FUNARTE")
+tainacan_ext(install_link, install_name)
