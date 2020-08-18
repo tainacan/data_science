@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 27 08:39:20 2020
-
-@author: luisr
-"""
 from bs4 import BeautifulSoup as bs
 import requests as req
 import random
@@ -93,7 +87,7 @@ for obj_id in range(100):
     print("   * Metadados para o item {} coletados.".format(n))
     time.sleep(7)
 
-result_df.to_csv("C://Users//luisr//OneDrive//Documentos//bn_sophia_acervo_ext.csv", index=False)
+result_df.to_csv("bn_sophia_acervo_ext.csv", index=False)
 
-with open("C://Users//luisr//OneDrive//Documentos//bn_acervo_notFindCodes.txt", "w") as not_find_txt:
+with open("bn_acervo_notFindCodes.txt", "w") as not_find_txt:
         not_find_txt.write(", ".join(str(code) for code in not_find))
