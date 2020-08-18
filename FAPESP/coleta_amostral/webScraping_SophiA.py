@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Aug  9 16:50:10 2020
-
-@author: luisr
-"""
 from selenium import webdriver
 import pandas as pd
 import random
@@ -90,10 +84,10 @@ def sophia_webScrape(entidade, url, n_items):
             time.sleep(5)
             
     #Csv com dados dos registros coletados
-    result_df.to_csv("C://Users//luisr//OneDrive//Documentos//" + entidade + "_sophia_webSpcrape.csv", index = False)
+    result_df.to_csv(path + entidade + "_sophia_webSpcrape.csv", index = False)
     
     #Txt com os códigos não encontrados
-    with open("C://Users//luisr//OneDrive//Documentos//" + entidade + "_notFindCodes.txt", "w") as not_find_txt:
+    with open(path + entidade + "_notFindCodes.txt", "w") as not_find_txt:
         not_find_txt.write(", ".join(str(code) for code in not_find))
     
     firefox.quit()
