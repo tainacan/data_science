@@ -1,68 +1,65 @@
 import pandas as pd
 import requests
-from bs4 import BeautifulSoup as bs
+from time import sleep
 
-def tainacan_ext(install, output_name):
+install = "https://pesquisa.tainacan.org"
+
+def taiancan_ext(install):
+
+    install_name =  install.slipt("/")[2].split(".")[0]
+    #Dicionarios/Dataframes
+    colDict = {}
     
+    #Tratanto Coleções
     col_endpoint = install+"/wp-json/tainacan/v2/collections/"
     col_r = requests.get(col_endpoint).json()
     
     for col in col_r:
+        colDict[col['name']] = col['id']
+    
+    for colecao in colDict.keys():
         
-        col_name = col['name']
-        col_id = col['id']
         items_df = pd.DataFrame()
         
-        print("\nColetando 100 itens da coleção {}".format(col_name))
-              
         for i in range(4):
             
-            print("   * Coletando a página {} de itens".format(i))
+            i += 1
+            print("Verificando a página {} de itens".format(i))
             
-            items_endpoint = install+"/wp-json/tainacan/v2/collection/{}/items/?perpage=25".format(col_id)
+            items_endpoint = install+"/wp-json/tainacan/v2/collection/{}/items/?perpage=25&paged={}".format(colDict[colecao], i)
             item_r = requests.get(items_endpoint).json()
             
-            if item_r == []:
-                 print("   * Todos os itens da coleção {} coletados".format(col_name))
+            if item_r["items"] == []:
                 
-            else:
+                print("   * Todos os itens da coleção {} coletados".format(colecao))
                 
-                if type(item_r) == dict:
+                break
+                
+            elif type(item_r) == dict:
+                
+                item_r = item_r['items']
                     
-                    item_r = item_r['items']
-                        
                 for item in item_r:
                         
                     result_dict = {}
                         
                     for metadata in item['metadata'].keys():
                         
-                        metadado = item['metadata'][metadata]['name']
+                        #Metadados e Valores
+                        atributo = item['metadata'][metadata]['name']
                         value = item['metadata'][metadata]['value_as_string']
                         
                         if value == "":
                             continue
                         else:
-                            result_dict[metadado] = value
+                            result_dict[atributo] = value
                     
+                    #Link do Item no Tainacan
                     result_dict['Link do Item'] = item['url']
-                                        
-                    try:
-                        soup = bs(item['document_as_html'], 'html.parser')
-                        result_dict['Document'] = soup.find('a').get('href')
-                    except:
-                        result_dict['Document'] = ""
+                    #Link do Documento
+                    result_dict['Document'] = item['document']
                     
                     items_df = items_df.append(result_dict, ignore_index=True)
-                            
-                    i += 1
-                        
-                    if i == 4:
-                            
-                        print("   * Finalizando coleta de 25 itens da coleção {}".format(col_name))
-        
-      
-        print("   * Salvando os itens da coleção {}".format(col_name))
-        items_df.to_csv(path+output_name+"_{}_Tainacan_ext.csv".format(col_name), index=False)
-    
-tainacan_ext(install_link, install_name)
+            sleep(5)
+            
+        items_df.to_csv("{}_{}.csv".format(install_name,colecao))
