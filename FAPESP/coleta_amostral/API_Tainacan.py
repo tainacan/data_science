@@ -2,11 +2,16 @@ import pandas as pd
 import requests
 from time import sleep
 
-install = "https://pesquisa.tainacan.org"
+install = ""
 
 def taiancan_ext(install):
+    
 
-    install_name =  install.slipt("/")[2].split(".")[0]
+    if "www." in install:
+        install_name =  install.split("/")[2].split(".")[1]
+    else:
+        install_name =  install.split("/")[2].split(".")[0]
+        
     #Dicionarios/Dataframes
     colDict = {}
     
@@ -14,19 +19,20 @@ def taiancan_ext(install):
     col_endpoint = install+"/wp-json/tainacan/v2/collections/"
     col_r = requests.get(col_endpoint).json()
     
-    for col in col_r:
-        colDict[col['name']] = col['id']
     
+    for col in col_r:
+        colDict[col['name']] = [col['id'], col['total_items']['publish']]
+
     for colecao in colDict.keys():
         
         items_df = pd.DataFrame()
-        
-        for i in range(4):
+        print("Coletando {} itens da coleção {}".format(colDict[colecao][1],colecao))
+        for i in range(int(colDict[colecao][1])):
             
             i += 1
             print("Verificando a página {} de itens".format(i))
             
-            items_endpoint = install+"/wp-json/tainacan/v2/collection/{}/items/?perpage=25&paged={}".format(colDict[colecao], i)
+            items_endpoint = install+"/wp-json/tainacan/v2/collection/{}/items/?perpage=25&paged={}".format(colDict[colecao][0], i)
             item_r = requests.get(items_endpoint).json()
             
             if item_r["items"] == []:
@@ -63,3 +69,5 @@ def taiancan_ext(install):
             sleep(5)
             
         items_df.to_csv("{}_{}.csv".format(install_name,colecao))
+
+taiancan_ext(install)
