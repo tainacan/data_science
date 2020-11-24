@@ -1,0 +1,19 @@
+from bs4 import BeautifulSoup as bs
+import requests as req
+import pandas as pd
+
+url = "http://www.palmares.gov.br/?page_id=50190"
+
+coluna_palmares = ['Titulo/Descricao', 'Link_Imagem']
+tabela_palmares = pd.DataFrame(columns=coluna_palmares)
+
+page = req.get(url)
+soup = bs(page.text, 'html.parser')
+
+link_imagem = soup.find_all("img")[-13:]
+for busca in link_imagem:
+    img = busca.get("src")
+    titulo = busca.get("alt")
+    tabela_palmares = tabela_palmares.append({'Titulo/Descricao':titulo,'Link_Imagem':img}, ignore_index=True)
+    
+tabela_palmares.to_csv('coleta_palmares.csv')
