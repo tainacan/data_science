@@ -46,9 +46,6 @@ for record in records:
     
     i+=1
     
-    if i == 100:
-        break
-    
     time.sleep(5)
 
 oai_rui.to_csv("oai_rui.csv")
