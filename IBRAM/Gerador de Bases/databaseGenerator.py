@@ -42,9 +42,9 @@ ranges = [10000,20000,50000,100000,200000,500000]
 
 #Dicionário de metadados gerados
 #Chaves = Metadados / Valores = Divisor da base de dados.
-metadataDict = {"m1":2, "m2":5, "m3":10, "m4":20, "m5":50, "m6":100, "m7":200,
-               "m8":500, "m9":1000, "m10": 2000,"datas":2000, "numeros":2000,
-               "m11":5000, "m12":10000, "title":"", "description":""}
+metadataDict = {"m1|taxonomy|display_yes":2, "m2|text|display_yes":5, "m3|taxonomy|display_yes":10, "m4|taxonomy|display_yes":20, "m5|taxonomy|display_yes":50, "m6":100, "m7":200,
+               "m8|text|display_yes":500, "m9|text|display_yes":1000, "m10|text|display_yes": 2000,"datas|date|display_yes":2000, "numeros|numeric|display_yes":2000,
+               "m11|taxonomy|display_yes":5000, "m12|taxonomy|display_yes":10000, "title|core_title|display_yes":"", "description|core_description|display_yes":""}
 
 ###Base de valores textuais###
 """
