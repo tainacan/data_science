@@ -27,7 +27,6 @@ for arquivo in glob.glob("./CSV/*.*"):
             df.drop(columns=[coluna], inplace=True) #apaga a coluna
             print("Apagando ",coluna)
             
-    print()
     df=df.groupby(level=0, axis=1).apply(lambda x: x.apply(sjoin, axis=1)) #agrupa as colunas e chama a função pelo lambda
     print("NOME DAS COLUNAS DEPOIS")
     nomescolunas=df.columns.tolist()
