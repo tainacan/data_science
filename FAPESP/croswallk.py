@@ -4,7 +4,9 @@ import pandas as pd
 import glob # biblioteca para leitura de arquivos em diretórios
 
 dfmapeamento=pd.read_excel('mapeamento.xlsx')
-def sjoin(x): return '||'.join(x[x.notnull()].astype(str)) #comando para unir os valores de colunas iguais separado por ||
+
+def sjoin(x):
+    return '||'.join(x[x.notnull()].astype(str)) #comando para unir os valores de colunas iguais separado por ||
 
 for arquivo in glob.glob("./CSV/*.*"):
     df=pd.read_csv(arquivo,sep=None, engine="python") #comando que detecta o separados do CSV automaticamente
@@ -12,10 +14,8 @@ for arquivo in glob.glob("./CSV/*.*"):
     
     print("**************************")
     print(arquivo)
-    print()
     print("NOME DAS COLUNAS ANTES")
     print(nomescolunas)  
-    
     
     for coluna in nomescolunas:
         resultado=dfmapeamento.loc[dfmapeamento['Metadados'] == coluna]
@@ -28,7 +28,7 @@ for arquivo in glob.glob("./CSV/*.*"):
             print("Apagando ",coluna)
             
     print()
-    df=df.groupby(level=0, axis=1).apply(lambda x: x.apply(sjoin, axis=1)) # agrupa as colunas e chama a função pelo lambda
+    df=df.groupby(level=0, axis=1).apply(lambda x: x.apply(sjoin, axis=1)) #agrupa as colunas e chama a função pelo lambda
     print("NOME DAS COLUNAS DEPOIS")
     nomescolunas=df.columns.tolist()
     print(nomescolunas) 
