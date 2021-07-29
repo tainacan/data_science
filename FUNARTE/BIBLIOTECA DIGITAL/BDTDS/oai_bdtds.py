@@ -13,19 +13,20 @@ from oaipmh.client import Client
 from oaipmh.metadata import MetadataRegistry, oai_dc_reader
 import pandas as pd
 import re
+from datetime import datetime
 
-result_df = pd.DataFrame()
+result_df = pd.read_csv('resultado_oai_bdtd_columns.csv')
 registry = MetadataRegistry()
 registry.registerReader('oai_dc', oai_dc_reader)
 
-bdtd = pd.read_csv('bdtd_unb.csv')#le o arquivo com as informações dos provedores
-types =  pd.read_csv('types.csv')#le o arquivo com os data types possíveis
+bdtd = pd.read_csv('BDTDS_CONJUNTOS.csv')#le o arquivo com as informações dos provedores
+types =  pd.read_csv('types.csv')#le o arquivo com os data types
 #%%
 def join_dict_values(dictionary): #transofrma as listas em string e une os valores por ||
     for key,value in dictionary.items():
         if isinstance(dictionary[key], list):
             dictionary[key] = '||'.join(dictionary[key])
-            
+
 def remove_empty_keys(dictionary):#remove metadados com valores vazios
 
     no_empty_dict = dict()
@@ -43,14 +44,18 @@ def remove_empty_keys(dictionary):#remove metadados com valores vazios
 
     return no_empty_dict
 
-
 with open('erro_log.txt', 'w') as f: #abre um arquivo de texto para armazenar os erros da coleta
 
     for i in range(len(bdtd['provider'])):# percorre a planilha dos provedores
+    
+        provider = bdtd['provider'][i]#armazena a sigla da instituição
+        url_provider = bdtd['url_provider'][i]#armazena a url do provedor
+        set_list = bdtd['setSpec'][i].split(",")#recupera as comunidades a serem coletadas
+        print(provider, set_list)
+        
+
         try:
-            provider = bdtd['provider'][i].split("(")[1].strip(")")#armazena a sigla da instituição
-            url_provider = bdtd['url_provider'][i]#armazena a url do provedor
-            set_list = bdtd['comunidade'].to_list()[0].split(",")#recupera as comunidades a serem coletadas
+            
             print("Acessando os dados de provedor ", provider)
             
             #Conecta com o provedor OAI-PMH
@@ -58,14 +63,20 @@ with open('erro_log.txt', 'w') as f: #abre um arquivo de texto para armazenar os
             registry.registerReader('oai_dc', oai_dc_reader)
             client = Client(url_provider, registry)
             
-            sets = client.listSets()#lista os conjuntos
+            #sets = client.listSets()#lista os conjuntos
             
-            for setSpec, setName, setDescription in sets: #percorre cada conjunto do provedor
+            for setSpec in set_list: #percorre cada conjunto do provedor
+
                 try:
                     
-                    if setName.strip() in set_list: #verifica se o conjunto está na lista dos selecionados
+                    if str(setSpec).strip() in set_list: #verifica se o conjunto está na lista dos selecionados
+                    
+                        print("********CONJUNTO ENCONTADO***********")
+                    
                         records = client.listRecords(metadataPrefix='oai_dc', set=setSpec)#lista os registros
-                        print("Coletando dados do conjunto ", setName)
+                        
+                        print("Coletando dados do conjunto {}, do provedor {} \n".format(setSpec, provider))
+                        
                         count = 1
                         
                         for record in records:#percorre os registros
@@ -80,34 +91,38 @@ with open('erro_log.txt', 'w') as f: #abre um arquivo de texto para armazenar os
                         
                                 #only save documents that have identifier metadata
                                 if doc['identifier']:
+                                    join_dict_values(doc)#transformar valores de lista para texto separado por ||
                                     
-                                    if count > 0 and doc['_id'] not in result_df['_id'].to_list():# verifica se o registro já foi coletado
+                                    if doc['_id'] in result_df['_id'].unique():#Verifica se o registro já foi inserido na base
+                                        print("Registro já adicionado")
+                                        continue
                                     
-                                        join_dict_values(doc)#transformar valores de lista para texto separado por ||
-                                    
-                                        if doc['type'].lower().strip() in types['type'].to_list():#verifica se o tipo do registro é do tipo desejado
+                                    else:
+                                        print("Coletando dados do registro ", doc['type'])
                                         
-                                            print("Coletando dados do registro ", doc['type'])
-                                            try:
-                                                doc['provider'] = provider
-                                                doc['conjunto'] = setName
-                                                doc['setSpec'] = setSpec
-                                                #print(count)
-                                                count +=1
-                                                result_df = result_df.append(doc, ignore_index=True)#armazena o registro em um DataFrame
-                                                
-                                            except Exception as e:
-                                                print(e)
-                                                f.write(str(e))
-                                                continue
+                                        try:
+                                            doc['provider'] = provider
+                                            doc['setSpec'] = setSpec
+                                            #print(count)
+                                            count +=1
+                                            print("Coletando registro ",count)
+                                            
+                                            result_df = result_df.append(doc, ignore_index=True)#armazena o registro em um DataFrame
+                                            
+                                        except Exception as e:
+                                            print(e)
+                                            dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                                            f.write("{} -- ** {} ** - Erro de coleta de registro -- Conjunto {} -- Provedor {}\n".format(dt_string,str(e),setSpec,provider ))
+                                            continue
                 except Exception as e:
                     print(e)
-                    f.write(str(e))
+                    dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                    f.write("{} -- ** {} ** - Erro de coleta de conjunto -- Conjunto {} -- Provedor {}\n".format(dt_string, str(e),setSpec,provider))
                     continue
-        
                 result_df.to_csv("resultado_oai_bdtd.csv",index=False)#salva os dados coletados à cada conjunto
                 
         except Exception as e:
             print(e)
-            f.write(str(e))
+            dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            f.write("{} -- ** {} ** - Erro de coleta de provedor -- Provedor {}\n".format(dt_string, str(e),provider))
             continue
