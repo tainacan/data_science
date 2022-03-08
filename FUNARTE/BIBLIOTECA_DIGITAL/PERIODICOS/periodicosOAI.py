@@ -16,7 +16,7 @@ import re
 from datetime import datetime
 
 
-result_df = pd.read_csv('resultado_oai_periodicos_columns.csv')
+result_df = pd.read_csv('resultado_oai_periodicos_columns.csv')#Necessita de um csv com a coluna "_id"
 registry = MetadataRegistry()
 registry.registerReader('oai_dc', oai_dc_reader)
 
