@@ -121,7 +121,7 @@ with open('erro_log.txt', 'w', encoding="utf-8") as f: #abre um arquivo de texto
                     dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                     f.write("{} -- ** {} ** - Erro de coleta de conjunto -- Conjunto {} -- Provedor {}\n".format(dt_string, str(e),setSpec,provider_name))
                     continue
-                result_df.to_csv("resultado_oai_bdtd.csv",index=False)#salva os dados coletados à cada conjunto
+                result_df.to_csv("resultado_oai_periodicos.csv",index=False)#salva os dados coletados à cada conjunto
                 
                 
         except Exception as e:
